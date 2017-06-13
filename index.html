@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+  *{
+    margin: 0;
+    padding: 0;
+  }
+  li{
+    list-style: none;
+    border: 1px solid #000;
+    border-radius: 5px;
+    text-align: left;
+    padding: 10px 20px;
+    margin: 20px;
+    
+  }
+  a{
+    text-decoration: none;
+  }
+  #layout{
+    text-align: center;
+  }
+  #layout .load-more{
+    display: inline-block;
+     margin-top: 10px;
+  }
+  #layout .button{
+    padding: 10px 20px;
+    border: 1px solid #000;
+    border-radius: 5px;
+  }
+   #layout .button:hover{
+     background: green;
+     color: #fff;
+   }
+  </style>
+</head>
+<body>
+  <div id="layout">
+    <ul class="container">   
+
+    </ul>
+    <a href="javascript:void(0)" class="load-more button">加载更多</a>
+  </div>
+  <script>
+    var container = document.querySelector('#layout .container')
+    var btn = document.querySelector('#layout .button')
+    var page = 0;
+    btn.addEventListener('click', function(){
+       var xhr = new XMLHttpRequest()
+       xhr.onreadystatechange = function(){
+          if(xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 304)){
+           var array = JSON.parse(xhr.responseText)
+           console.log(array);
+            array.forEach(function(element){
+              container.innerHTML += '<li>' + element + '</li>'
+          });
+         }
+          page += 5;
+       }
+      xhr.open('get', '/loadMore?index=' + page + '&length=5' , true)//true表示异步
+      xhr.send()
+      
+    })
+    
+    /*function render(){
+      var detailCt = document.querySelector('.detail-area ul')
+      detailCt.innerHTML = '';
+      var ct = document.createDocumentFragment()
+      for(var i = 0; i < friends.length; i++){
+        var node = document.createElement('li')
+        node.innerText = friends[i]
+        ct.appendChild(node)
+      }
+      detailCt.appendChild(ct)
+    }*/
+  </script>
+  
+</body>
+</html>
